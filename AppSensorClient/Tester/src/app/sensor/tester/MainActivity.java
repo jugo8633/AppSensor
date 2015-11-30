@@ -13,32 +13,31 @@ import android.widget.Button;
 import android.widget.TextView;
 import app.sensor.AppSensor;
 import app.sensor.Logs;
-import app.sensor.SensorMsg;
 
 public class MainActivity extends Activity
 {
 
-	TextView	txtHttpResp	= null;
+	TextView txtHttpResp = null;
 
-	Handler		theHandler	= new Handler()
-							{
-								@Override
-								public void handleMessage(Message msg)
-								{
-									switch (msg.what)
-									{
-										case SensorMsg.RESPONSE_HTTP:
-											if (msg.obj instanceof String && null != msg.obj)
-											{
-												String strContent = (String) msg.obj;
-												txtHttpResp.setText(strContent);
-											}
-											break;
-									}
-								}
-							};
+	Handler theHandler = new Handler()
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			switch(msg.what)
+			{
+			case AppSensor.MSG_RESPONSE:
+				if (msg.obj instanceof String && null != msg.obj)
+				{
+					String strContent = (String) msg.obj;
+					txtHttpResp.setText(strContent);
+				}
+				break;
+			}
+		}
+	};
 
-	AppSensor	appSensor	= new AppSensor(theHandler);
+	AppSensor appSensor = new AppSensor(theHandler);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -57,7 +56,7 @@ public class MainActivity extends Activity
 			public void onClick(View v)
 			{
 				// TODO Auto-generated method stub
-				Map<String, String> parm = new HashMap<String, String>();
+				HashMap<String, String> parm = new HashMap<String, String>();
 				parm.put("SENSOR1aa", "is1aa");
 				parm.put("SENSOR2aa", "is2aa");
 				appSensor.sendEvent(parm);
